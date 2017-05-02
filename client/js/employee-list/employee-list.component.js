@@ -23,5 +23,53 @@ angular.module('employeeList').
       // ];
 
       $scope.employees = Employees.query();
+      $scope.showEmployeeForm = false;
+
+      $scope.delete = function (scope) {
+        var empId = scope.$modelValue.ID;
+        Employees.remove({id: empId})
+        scope.remove();
+     };
+
+     $scope.toggle = function (scope) {
+        scope.toggle();
+     };
+
+     $scope.moveLastToTheBeginning = function () {
+        var a = $scope.employees.pop();
+        $scope.employees.splice(0, 0, a);
+     };
+
+     $scope.submitNewEmployee = function() {
+        Employees.save($scope.newEmployee, function(result) {
+          $scope.newEmployee.ID = result.ID;
+          $scope.newEmployee.subordinates = [];
+          $scope.manager.subordinates.push($scope.newEmployee);
+
+          resetForm();
+        });
+     }
+
+     var resetForm = function() {
+       $scope.newEmployee = {
+         NAME: '',
+         POSITION: ''
+       };
+     }
+
+     $scope.newEmployeeForm = function(scope) {
+       resetForm();
+       $scope.showEmployeeForm = true;
+       $scope.manager = scope.$modelValue;
+       $scope.newEmployee.MANAGER = $scope.manager.ID;
+     }
+
+     $scope.collapseAll = function () {
+       $scope.$broadcast('angular-ui-tree:collapse-all');
+     };
+
+     $scope.expandAll = function () {
+       $scope.$broadcast('angular-ui-tree:expand-all');
+     };
     }
   });

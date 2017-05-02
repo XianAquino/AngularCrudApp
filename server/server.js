@@ -31,6 +31,18 @@ app.get('/employees', function(req, res) {
   });
 });
 
+app.post('/employees', function(req, res) {
+  employees.add(req.body, function(err, empId) {
+    res.json({ID: empId});
+  });
+});
+
+app.delete('/employees/:empId', function(req, res) {
+  employees.remove(req.params.empId, function(err, result) {
+    res.sendStatus(200);
+  })
+})
+
 app.get('/*', function(req, res) {
   res.sendFile(path.resolve(__dirname +  '/../client/index.html'));
 });
