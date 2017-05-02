@@ -12,18 +12,42 @@ app.use('/bower_components', express.static(path.join(__dirname + '/../bower_com
 app.use('/js', express.static(path.join(__dirname + '/../client/js')));
 app.use('/templates', express.static(path.join(__dirname + '/../client/templates')));
 
+
+// // non-recursive solution ------------------
+// var getEmployees = function(callback) {
+//   employees.getAll(null, function(err, managers) {
+//     async.forEach(managers, function(manager, callback) {
+//       employees.getAll(manager.ID, function(err, subordinates) {
+//         manager.subordinates = subordinates;
+//         callback();
+//       });
+//     }, function(err) {
+//       callback(managers);
+//     });
+//   });
+// };
+// //------------------------------------------
+
 var getEmployees = function(callback) {
   employees.getAll(null, function(err, managers) {
-    async.forEach(managers, function(manager, callback) {
-      employees.getAll(manager.ID, function(err, subordinates) {
-        manager.subordinates = subordinates;
-        callback();
-      });
-    }, function(err) {
-      callback(managers);
-    });
+    getSubordinates(managers, callback);
   });
 };
+
+var getSubordinates = function(managers, callback) {
+  async.forEach(managers, function(manager, callback) {
+    employees.getAll(manager.ID, function(err, subordinates) {
+      manager.subordinates = subordinates;
+      if(subordinates.length) {
+        getSubordinates(subordinates, callback)
+      } else {
+        callback();
+      }
+    });
+  }, function(err) {
+    callback(managers);
+  });
+}
 
 app.get('/employees', function(req, res) {
   getEmployees(function(employees) {

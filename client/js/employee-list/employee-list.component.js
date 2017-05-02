@@ -44,8 +44,11 @@ angular.module('employeeList').
         Employees.save($scope.newEmployee, function(result) {
           $scope.newEmployee.ID = result.ID;
           $scope.newEmployee.subordinates = [];
-          $scope.manager.subordinates.push($scope.newEmployee);
-
+          if ($scope.manager.subordinates){
+            $scope.manager.subordinates.push($scope.newEmployee);
+          } else {
+            $scope.manager.subordinates = [$scope.newEmployee];
+          }
           resetForm();
         });
      }
