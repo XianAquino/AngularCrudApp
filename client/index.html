@@ -1,5 +1,5 @@
 <!doctype>
-<html>
+<html ng-app='manager'>
   <head>
     <title>Angular CRUD</title>
     <meta charset="utf-8">
@@ -9,11 +9,21 @@
   </head>
 
   <body>
-    <h1>Hello</h1>
-
+    <h1>Manager</h1>
+    <blog-list></blog-list>
+    <div ng-view></div>
     <script src="/bower_components/angular/angular.js"></script>
     <script src="/bower_components/angular-route/angular-route.js"></script>
     <script src="/bower_components/angular-resource/angular-resource.js"></script>
     <script type="text/javascript" src="bower_components/angular-ui-tree/dist/angular-ui-tree.js"></script>
+    <script src="/js/app.module.js"></script>
+    <script src="/js/app.config.js"></script>
+
+    <script src="/js/employee-list/employee-list.module.js"></script>
+    <script src="/js/employee-list/employee-list.component.js"></script>
+
+    <script src="/js/resource/employees/employees.module.js"></script>
+    <script src="/js/resource/employees/employees.service.js"></script>
+
   </body>
 </html>

@@ -9,8 +9,8 @@ var bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use('/bower_components', express.static(path.join(__dirname + '/../bower_components')));
-app.use('/js', express.static(path.join(__dirname + '/../js')));
-app.use('/templates', express.static(path.join(__dirname + '/../templates')));
+app.use('/js', express.static(path.join(__dirname + '/../client/js')));
+app.use('/templates', express.static(path.join(__dirname + '/../client/templates')));
 
 var getEmployees = function(callback) {
   employees.getAll(null, function(err, managers) {
@@ -31,8 +31,8 @@ app.get('/employees', function(req, res) {
   });
 });
 
-app.get('/', function(req, res) {
-  res.sendFile(path.join(__dirname +  '/../client/index.html'));
+app.get('/*', function(req, res) {
+  res.sendFile(path.resolve(__dirname +  '/../client/index.html'));
 });
 
 app.listen(port, function() {
